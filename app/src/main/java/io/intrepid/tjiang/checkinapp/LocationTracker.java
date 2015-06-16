@@ -17,8 +17,8 @@ public class LocationTracker implements
 
     static final String LOGTAG = LocationTracker.class.getSimpleName();
 
-    private GoogleApiClient googleApiClient;
     private Location lastLocation;
+    private GoogleApiClient googleApiClient;
 
     public LocationTracker(Context context) {
         this.googleApiClient = new GoogleApiClient.Builder(context)
@@ -71,6 +71,16 @@ public class LocationTracker implements
 
     public GoogleApiClient getGoogleApiClient() {
         return this.googleApiClient;
+    }
+
+    /**
+     * Modifies lastLocation field to contain latitude and longitude at time of method call
+     */
+    public void updateLocation() {
+        this.googleApiClient.connect();
+        if (lastLocation != null) {
+            this.googleApiClient.disconnect();
+        }
     }
 }
 

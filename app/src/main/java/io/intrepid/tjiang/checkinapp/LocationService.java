@@ -12,10 +12,9 @@ public class LocationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(LOGTAG, "this service has started");
-        LocationTracker locator = new LocationTracker(this);
-        locator.getGoogleApiClient().connect();
-
-        //Todo: send out notification when LocationTracker terminates
+        LocationTracker locationTracker = new LocationTracker(this);
+        locationTracker.updateLocation();
+        //Todo: execute in intervals on a background thread.
         return Service.START_STICKY;
     }
 
