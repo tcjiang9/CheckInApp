@@ -1,31 +1,41 @@
 package io.intrepid.tjiang.checkinapp;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothClass;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 
+
 public class MainActivity extends Activity {
+    private boolean isRunning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-        final Button button = (Button) findViewById(R.id.start_service_button);
+
+        final Button button = (Button) this.findViewById(R.id.start_service_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO: start a service
-                button.setText("Running");
+                if (!isRunning) {
+                    isRunning = true;
+                    button.setText("Running");
+                    startService(new Intent(getApplicationContext(), LocationService.class));
+                }
             }
         });
-
-
     }
 
     @Override
