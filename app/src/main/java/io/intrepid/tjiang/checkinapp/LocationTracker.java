@@ -10,7 +10,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
-public class LocationTracker implements
+import java.util.TimerTask;
+
+public class LocationTracker extends TimerTask implements
         LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener   {
@@ -37,6 +39,7 @@ public class LocationTracker implements
             Log.v(LOGTAG, String.valueOf(lastLocation.getLatitude()));
             Log.v(LOGTAG, String.valueOf(lastLocation.getLongitude()));
         }
+        googleApiClient.disconnect();
     }
 
     @Override
@@ -69,8 +72,10 @@ public class LocationTracker implements
 
     }
 
-    public GoogleApiClient getGoogleApiClient() {
-        return this.googleApiClient;
+    @Override
+    public void run() {
+        Log.v(LOGTAG, "This has run");
+        updateLocation();
     }
 
     /**
@@ -78,9 +83,6 @@ public class LocationTracker implements
      */
     public void updateLocation() {
         this.googleApiClient.connect();
-        if (lastLocation != null) {
-            this.googleApiClient.disconnect();
-        }
     }
 }
 

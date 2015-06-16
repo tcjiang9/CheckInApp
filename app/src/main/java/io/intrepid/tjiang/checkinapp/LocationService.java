@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.Timer;
+
 public class LocationService extends Service {
 
     static final String LOGTAG = LocationService.class.getSimpleName();
@@ -13,7 +15,9 @@ public class LocationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(LOGTAG, "this service has started");
         LocationTracker locationTracker = new LocationTracker(this);
-        locationTracker.updateLocation();
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(locationTracker, 0, 10000);
+        //locationTracker.updateLocation();
         //Todo: execute in intervals on a background thread.
         return Service.START_STICKY;
     }
