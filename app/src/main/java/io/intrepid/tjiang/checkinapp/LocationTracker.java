@@ -21,6 +21,7 @@ public class LocationTracker extends TimerTask implements
 
     private Location lastLocation;
     private GoogleApiClient googleApiClient;
+    private int testCounter = 0;
 
     public LocationTracker(Context context) {
         this.googleApiClient = new GoogleApiClient.Builder(context)
@@ -39,7 +40,14 @@ public class LocationTracker extends TimerTask implements
             Log.v(LOGTAG, String.valueOf(lastLocation.getLatitude()));
             Log.v(LOGTAG, String.valueOf(lastLocation.getLongitude()));
         }
+        checkLocation();
         googleApiClient.disconnect();
+    }
+
+    private void checkLocation() {
+        if (testCounter == 3) { //this is a placeholder for determining if i'm within 50 ft of intrepid
+            //Todo send notification to service to stop self
+        }
     }
 
     @Override
@@ -75,6 +83,7 @@ public class LocationTracker extends TimerTask implements
     @Override
     public void run() {
         Log.v(LOGTAG, "This has run");
+        testCounter++;
         updateLocation();
     }
 
@@ -83,6 +92,14 @@ public class LocationTracker extends TimerTask implements
      */
     public void updateLocation() {
         this.googleApiClient.connect();
+    }
+
+    public int getTestCounter() {
+        return testCounter;
+    }
+
+    public void resetCounter() {
+        testCounter = 0;
     }
 }
 
