@@ -2,25 +2,30 @@ package io.intrepid.tjiang.checkinapp;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
+
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
+import com.google.android.gms.location.LocationListener;
 import java.util.TimerTask;
 
-public class LocationTracker extends TimerTask implements
+public class LocationTracker implements
         LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener   {
 
     static final String LOGTAG = LocationTracker.class.getSimpleName();
 
+    private OnLocationArrivedListener callback;
+
+    private LocationRequest locationRequest;
     private Location lastLocation;
     private GoogleApiClient googleApiClient;
+
     private int testCounter = 0;
 
     public LocationTracker(Context context) {
@@ -29,25 +34,44 @@ public class LocationTracker extends TimerTask implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(5 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+        callback = (OnLocationArrivedListener) context;
+    }
+
+    public interface OnLocationArrivedListener {
+        public void onLocationArrived();
+    }
+
+    /**
+     * Modifies lastLocation field to contain latitude and longitude at time of method call
+     */
+    public GoogleApiClient getGoogleApiClient() {
+        return this.googleApiClient;
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         lastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 googleApiClient);
-        Log.v(LOGTAG, "This has connected");
-        if (lastLocation != null) {
-            Log.v(LOGTAG, String.valueOf(lastLocation.getLatitude()));
-            Log.v(LOGTAG, String.valueOf(lastLocation.getLongitude()));
-        }
-        checkLocation();
-        googleApiClient.disconnect();
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                googleApiClient, locationRequest, this);
+
+        //have api client call onLocationChanged intermittently
+        //checkLocation();
     }
 
-    private void checkLocation() {
+    private boolean checkLocation() {
         if (testCounter == 3) { //this is a placeholder for determining if i'm within 50 ft of intrepid
-            //Todo send notification to service to stop self
+            //Todo: send notification to service to stop self
+            //Todo: use sent message to service via interface
+            return true;
+         //   callback = //instance of the service;
+//            callback.onLocationArrived();
         }
+        return true;
     }
 
     @Override
@@ -57,41 +81,16 @@ public class LocationTracker extends TimerTask implements
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.v(LOGTAG, location.toString());
+        if (checkLocation()){
+        }
 
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
+        callback.onLocationArrived();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
-    }
-
-    @Override
-    public void run() {
-        Log.v(LOGTAG, "This has run");
-        testCounter++;
-        updateLocation();
-    }
-
-    /**
-     * Modifies lastLocation field to contain latitude and longitude at time of method call
-     */
-    public void updateLocation() {
-        this.googleApiClient.connect();
     }
 
     public int getTestCounter() {

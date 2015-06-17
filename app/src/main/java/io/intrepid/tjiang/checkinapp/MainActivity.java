@@ -38,12 +38,8 @@ public class MainActivity extends Activity {
                     isRunning = true;
                 } else {
                     button.setText(R.string.start_service);
-                    boolean test = stopService(new Intent(getApplicationContext(),
+                    stopService(new Intent(getApplicationContext(),
                             io.intrepid.tjiang.checkinapp.LocationService.class));
-
-                    //Todo: Fix bug where Service fails to stop despite returning true
-
-                    Log.v("StopTest", String.valueOf(test));
                     isRunning = false;
                 }
             }

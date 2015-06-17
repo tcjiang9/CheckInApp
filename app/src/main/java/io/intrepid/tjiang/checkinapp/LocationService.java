@@ -7,18 +7,18 @@ import android.util.Log;
 
 import java.util.Timer;
 
-public class LocationService extends Service {
+public class LocationService extends Service implements LocationTracker.OnLocationArrivedListener {
     private Timer timer;
+    private LocationService callback;
+    LocationTracker locationTracker;
 
     static final String LOGTAG = LocationService.class.getSimpleName();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(LOGTAG, "this service has started");
-        LocationTracker locationTracker = new LocationTracker(this);
-
-        timer = new Timer();
-        timer.scheduleAtFixedRate(locationTracker, 0, 7000);
+        locationTracker = new LocationTracker(this);
+        locationTracker.getGoogleApiClient().connect();
 
         Log.v(LOGTAG, String.valueOf(locationTracker.getTestCounter()));
         if (locationTracker.getTestCounter() == 3) {
@@ -40,6 +40,11 @@ public class LocationService extends Service {
 
     @Override
     public void onDestroy() {
-        timer.cancel();
+        locationTracker.getGoogleApiClient().disconnect();
+    }
+
+    @Override
+    public void onLocationArrived() {
+        //TODO
     }
 }
