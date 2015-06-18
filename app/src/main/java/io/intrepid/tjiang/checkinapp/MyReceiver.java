@@ -33,9 +33,11 @@ public class MyReceiver extends BroadcastReceiver {
 
         Log.v("BroadCastReceiver", "here");
 
-        String userInput = "TC is here";
+        String userInput = "Chaaarrrmander!";
         SlackMessage slackMessage = new SlackMessage();
         slackMessage.text = userInput;
+        slackMessage.username = "TC Jiang";
+        slackMessage.icon_emoji = ":charmander:";
         SlackService slackService = restAdapter.create(SlackService.class);
         slackService.postSlackMessage(slackMessage, new Callback<Void>() {
             @Override
