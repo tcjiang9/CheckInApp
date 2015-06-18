@@ -53,12 +53,11 @@ public class LocationService extends Service implements LocationTracker.OnLocati
         Notification arrivedNotification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.intrepid_logo)
                 .setContentTitle("You have arrived at Intrepid!")
-                .setContentText("Tap to post to Slack")
-                .setContentIntent(postIntent) //Todo: create pendingIntent to send out
+                .setContentText("Touch to post to Slack")
+                .setContentIntent(postIntent)
                 .build();
         sendNotification(arrivedNotification);
         stopSelf();
-        //TODO send notification
     }
 
     private void sendNotification(Notification notification) {
