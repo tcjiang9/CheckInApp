@@ -62,8 +62,9 @@ public class LocationTracker implements
                 googleApiClient, locationRequest, this);
     }
 
-    private boolean checkLocation() {
-        if (testCounter == 3) { //this is a placeholder for determining if i'm within 50 ft of intrepid
+    //Todo: Use geofence or pythagorean theorem
+    private boolean atLocation() {
+        if (testCounter == 1) { //this is a placeholder for determining if i'm within 50 ft of intrepid
             return true;
         } else {
             return false;
@@ -72,7 +73,7 @@ public class LocationTracker implements
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        //TODO
     }
 
     @Override
@@ -81,7 +82,7 @@ public class LocationTracker implements
         testCounter ++;
         Log.v(LOGTAG, String.valueOf(testCounter));
         lastLocation = location;
-        if (checkLocation()){
+        if (atLocation()){
             callback.onLocationArrived();
         }
     }

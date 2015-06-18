@@ -2,6 +2,7 @@ package io.intrepid.tjiang.checkinapp;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
