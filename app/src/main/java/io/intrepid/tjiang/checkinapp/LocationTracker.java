@@ -25,8 +25,9 @@ public class LocationTracker implements
     private Location lastLocation;
     private GoogleApiClient googleApiClient;
 
-    private final double INTREPID_LONG = 42.366982;
-    private final double INTREPID_LAT = -71.080364;
+    private final Location intrepidLocation = new Location("Provider");
+    private final double INTREPID_LAT = 42.366982;
+    private final double INTREPID_LONG = -71.080364;
 
     private int testCounter = 0;
 
@@ -40,6 +41,8 @@ public class LocationTracker implements
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(5 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+        intrepidLocation.setLatitude(INTREPID_LAT);
+        intrepidLocation.setLongitude(INTREPID_LONG);
         callback = (OnLocationArrivedListener) context;
     }
 
@@ -63,8 +66,8 @@ public class LocationTracker implements
     }
 
     //Todo: Use geofence or pythagorean theorem
-    private boolean atLocation() {
-        if (testCounter == 1) { //this is a placeholder for determining if i'm within 50 ft of intrepid
+    private boolean atLocation(Location location) {
+        if (location.distanceTo(intrepidLocation) < 50) { //this is a placeholder for determining if i'm within 50 ft of intrepid
             return true;
         } else {
             return false;
@@ -79,10 +82,9 @@ public class LocationTracker implements
     @Override
     public void onLocationChanged(Location location) {
         Log.v(LOGTAG, location.toString());
-        testCounter ++;
-        Log.v(LOGTAG, String.valueOf(testCounter));
         lastLocation = location;
-        if (atLocation()){
+        Log.v(LOGTAG, "intrepid location" + intrepidLocation.toString());
+        if (atLocation(lastLocation)){
             callback.onLocationArrived();
         }
     }
