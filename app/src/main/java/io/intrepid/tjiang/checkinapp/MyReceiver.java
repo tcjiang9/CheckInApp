@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class BroadCastReceiver extends BroadcastReceiver {
+public class MyReceiver extends BroadcastReceiver {
+    public MyReceiver() {
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        //Todo: receive the Pending Intent the notification sends out on click
+        // TODO: This method is called when the BroadcastReceiver is receiving
+        // an Intent broadcast.
         Log.v("BroadCastReciever", "Received Intent");
-        //class postToSlack class = new class
-        //postToSlack class.start
     }
 }

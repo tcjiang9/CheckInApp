@@ -43,8 +43,8 @@ public class LocationService extends Service implements LocationTracker.OnLocati
 
     @Override
     public void onLocationArrived() {
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent postIntent = PendingIntent.getActivity(
+        Intent intent = new Intent(this, MyReceiver.class);
+        PendingIntent postIntent = PendingIntent.getBroadcast(
                 this,
                 0,
                 intent,
