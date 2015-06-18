@@ -11,7 +11,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationListener;
-import java.util.TimerTask;
 
 public class LocationTracker implements
         LocationListener,
@@ -25,6 +24,9 @@ public class LocationTracker implements
     private LocationRequest locationRequest;
     private Location lastLocation;
     private GoogleApiClient googleApiClient;
+
+    private final double INTREPID_LONG = 42.366982;
+    private final double INTREPID_LAT = -71.080364;
 
     private int testCounter = 0;
 
@@ -58,20 +60,14 @@ public class LocationTracker implements
                 googleApiClient);
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 googleApiClient, locationRequest, this);
-
-        //have api client call onLocationChanged intermittently
-        //checkLocation();
     }
 
     private boolean checkLocation() {
         if (testCounter == 3) { //this is a placeholder for determining if i'm within 50 ft of intrepid
-            //Todo: send notification to service to stop self
-            //Todo: use sent message to service via interface
             return true;
-         //   callback = //instance of the service;
-//            callback.onLocationArrived();
+        } else {
+            return false;
         }
-        return true;
     }
 
     @Override
@@ -82,10 +78,12 @@ public class LocationTracker implements
     @Override
     public void onLocationChanged(Location location) {
         Log.v(LOGTAG, location.toString());
+        testCounter ++;
+        Log.v(LOGTAG, String.valueOf(testCounter));
+        lastLocation = location;
         if (checkLocation()){
+            callback.onLocationArrived();
         }
-
-        callback.onLocationArrived();
     }
 
     @Override
