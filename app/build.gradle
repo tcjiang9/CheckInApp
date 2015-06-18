@@ -4,6 +4,14 @@ android {
     compileSdkVersion 22
     buildToolsVersion "23.0.0 rc2"
 
+    ext.localProperties = new Properties()
+    ext.localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    ext.getLocalProperty = { propertyName ->
+        def property = localProperties.getProperty(propertyName)
+        return property == null ? "" : property
+    }
+
     defaultConfig {
         applicationId "io.intrepid.tjiang.checkinapp"
         minSdkVersion 16
@@ -12,6 +20,10 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        all {
+            def slackChannelUrlKey = getLocalProperty("webhook_url")
+            buildConfigField "String", "webhook_url", "\"$slackChannelUrlKey\""
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

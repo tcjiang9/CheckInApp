@@ -32,16 +32,15 @@ public class MyReceiver extends BroadcastReceiver {
                 .build();
 
         Log.v("BroadCastReceiver", "here");
-
-        String userInput = "Chaaarrrmander!";
+        String userInput = ":bulbasaur: :squirtle:";
         SlackMessage slackMessage = new SlackMessage();
         slackMessage.text = userInput;
         slackMessage.username = "TC Jiang";
         slackMessage.icon_emoji = ":charmander:";
         SlackService slackService = restAdapter.create(SlackService.class);
-        slackService.postSlackMessage(slackMessage, new Callback<Void>() {
+        slackService.postSlackMessage(BuildConfig.webhook_url, slackMessage, new Callback<Object>() {
             @Override
-            public void success(Void aVoid, Response response) {
+            public void success(Object object, Response response) {
                 Log.v("BroadCastReceiver", "Successfully posted");
             }
 

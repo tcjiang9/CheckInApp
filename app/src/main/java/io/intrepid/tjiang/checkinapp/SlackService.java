@@ -9,6 +9,8 @@ import retrofit.http.Path;
 
 public interface SlackService {
 
-    @POST("/services/T026B13VA/B064U29MZ/vwexYIFT51dMaB5nrejM6MjK")
-    void postSlackMessage(@Body SlackMessage slackMessage, Callback<Void> callback);
+    @POST("/services/{webhook_url}")
+    void postSlackMessage(@Path(value = "webhook_url", encode = false) String urlkey,
+                          @Body SlackMessage slackMessage,
+                          Callback<Object> callback);
 }
