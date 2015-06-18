@@ -20,24 +20,17 @@ public class MyReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent restartIntent = new Intent(context, MainActivity.class);
-        restartIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(restartIntent);
+        restartActivity(context);
 
-        Log.v("BroadCastReciever", "Received Intent");
-        Gson gson = new GsonBuilder().create();
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("https://hooks.slack.com")
-                //.setConverter(new GsonConverter(gson))
                 .build();
+        SlackService slackService = restAdapter.create(SlackService.class);
 
-        Log.v("BroadCastReceiver", "here");
         String userInput = ":bulbasaur: :squirtle:";
         SlackMessage slackMessage = new SlackMessage();
-        slackMessage.text = userInput;
-        slackMessage.username = "TC Jiang";
-        slackMessage.icon_emoji = ":charmander:";
-        SlackService slackService = restAdapter.create(SlackService.class);
+        makeSlackMessage(slackMessage, userInput, "TC Jiang", ":charmander:");
+
         slackService.postSlackMessage(BuildConfig.webhook_url, slackMessage, new Callback<Object>() {
             @Override
             public void success(Object object, Response response) {
@@ -49,5 +42,17 @@ public class MyReceiver extends BroadcastReceiver {
                 Log.v("BroadCastReceiver", "failed posted");
             }
         });
+    }
+
+    private void restartActivity(Context context) {
+        Intent restartIntent = new Intent(context, MainActivity.class);
+        restartIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(restartIntent);
+    }
+
+    private void makeSlackMessage(SlackMessage slackMessage, String text, String username, String icon) {
+        slackMessage.text = text;
+        slackMessage.icon_emoji = icon;
+        slackMessage.username = username;
     }
 }
