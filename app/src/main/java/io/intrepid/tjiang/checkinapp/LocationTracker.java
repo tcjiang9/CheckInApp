@@ -67,11 +67,7 @@ public class LocationTracker implements
 
     //Todo: Use geofence or pythagorean theorem
     private boolean atLocation(Location location) {
-        if (location.distanceTo(intrepidLocation) < 50) { //this is a placeholder for determining if i'm within 50 ft of intrepid
-            return true;
-        } else {
-            return false;
-        }
+        return location.distanceTo(intrepidLocation) < 50;
     }
 
     @Override

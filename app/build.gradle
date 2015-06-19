@@ -37,5 +37,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.squareup.retrofit:retrofit:1.8.0@jar'
     compile 'com.google.code.gson:gson:2.3'
+    
 
 }

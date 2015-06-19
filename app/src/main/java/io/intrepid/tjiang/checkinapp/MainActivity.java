@@ -2,7 +2,6 @@ package io.intrepid.tjiang.checkinapp;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,11 +21,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         final Button button = (Button) this.findViewById(R.id.start_service_button);
-        if (!isMyServiceRunning(io.intrepid.tjiang.checkinapp.LocationService.class)) {
-            isRunning = false;
+        isRunning = isMyServiceRunning(io.intrepid.tjiang.checkinapp.LocationService.class);
+        if (!isRunning) {
             button.setText(R.string.start_service);
         } else {
-            isRunning = true;
             button.setText(R.string.running_string);
         }
         button.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +43,8 @@ public class MainActivity extends Activity {
             }
         });
     }
+
+
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
